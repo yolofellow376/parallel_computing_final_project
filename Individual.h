@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <map>
 #include "IndividualParameters.h"
 
 // Individual represents one person that can be infected, healed, infect others and move to other graph node locations
@@ -12,7 +13,7 @@ public:
 	void recover();
 	void advance_epoch();
 	void try_infect();
-	void move(std::vector<int>& new_locations);
+	void move(std::vector<int>& new_locations, std::map<int,int> weights);
 	void set_location(int location);
 	int get_location() const;
 	bool is_infected() const;
@@ -26,7 +27,7 @@ private:
 	int location_; // Refers to the graph node that represents the current location of the individual
 	IndividualParameters parameters_;
 	static float get_random_infect_chance();
-	static int get_random_location(size_t neighbours_size);
+	static int get_random_location(std::map<int,int> weights,std::vector<int>& node_neighbours);
 };
 
 // Infect the individual

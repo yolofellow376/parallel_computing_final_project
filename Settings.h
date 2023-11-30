@@ -4,7 +4,15 @@
 // Default settings and some custom type definitions
 
 // S means selector
-typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> LocationUndirectedGraph;
+typedef boost::adjacency_list<
+    boost::vecS,                                   // Vertex storage
+    boost::vecS,                                   // OutEdge storage
+    boost::directedS,                              // Directed or undirected
+    boost::no_property,                            // No vertex property
+    boost::property<boost::edge_weight_t, double>  // Edge property with weight
+> LocationUndirectedGraph;
+
+
 
 static const bool SAVE_CSV = false;
 static const bool SAVE_GRAPHVIZ = false;

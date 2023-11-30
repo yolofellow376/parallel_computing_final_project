@@ -1,27 +1,33 @@
 #!/bin/bash
-# The interpreter used to execute the script
+# (See https://arc-ts.umich.edu/greatlakes/user-guide/ for command details)
 
-#SBATCH --job-name=EE587
-#SBATCH --mail-user=zizien@umich.edu
+# Set up batch job settings
+#SBATCH --job-name=mpi_hello_world
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=4
-#SBATCH --cpus-per-task=1
-#SBATCH --mem-per-cpu=10g
-#SBATCH --time=00:01:00
-#SBATCH --account=ywuocean0
+#SBATCH --mem-per-cpu=1g
+#SBATCH --time=00:05:00
+#SBATCH --account=eecs587f23_class
 #SBATCH --partition=standard
 
-export LANG=en_US.utf8
-export LC_ALL=en_US.utf8
 
+# Run your program
+
+# (">" redirects the print output of your program, in this case to "output.txt")
+
+# -np command sets number of processors to run program with. If you specify more processors
+# using -np command than you have requisitioned using the #SBATCH --ntasks-per-node command
+# your program will not run
+
+# ./hello_world is the name of the program executable
+
+# --bind-to core sets up mpi environment and specifies which hardware to bind MPI processes to
+# you don't need to mess with this
 module purge
-module load gcc openmpi
+module load gcc
+module load openmpi
+g++ -c Individual.cpp -o Individual.o -I ../../boost-ver/include/
+g++ -c GraphHandler.cpp -o GraphHandler.o -I ../../boost-ver/include/
+g++ -fopenmp Infect.cpp Individual.o GraphHandler.o -o 3 -I ../../boost-ver/include/
 
-cd ~/EECS587_TeamAA
-
-g++ -std=c++11 -c  GraphHandler.cpp -o GraphHandler.o -I /home/zizien/Downloads/boost_1_82_0/out/include/
-g++ -std=c++11 -c  Individual.cpp -o Individual.o -I /home/zizien/Downloads/boost_1_82_0/out/include/
-g++ -std=c++11 -O0 -fopenmp Infect.cpp Individual.o GraphHandler.o -o main -I /home/zizien/Downloads/boost_1_82_0/out/include/
-
-./main > slurm999999999999999
-
+./3 > output3.txt

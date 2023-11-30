@@ -1,0 +1,14 @@
+----- Infectious Disease Modelling -----
+Number of threads: 4
+Individual Count: 1000
+Total Epochs: 3
+Graph from file: myedge.edges
+Repeat count: 1
+Location Count: 6
+Edge Count: 0
+Running serial....218.656 ms
+
+Running with OpenMP...total population: 1000
+total population: 1000
+total population: 1000
+.188.583 ms

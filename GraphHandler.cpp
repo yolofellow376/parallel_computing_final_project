@@ -58,7 +58,7 @@ std::vector<Individual> GraphHandler::get_random_individuals(int individual_coun
 	// Randomly assign locations to individuals in the population	
 	std::random_device random_device;
 	std::mt19937 mersenne_twister_engine(random_device());
-	std::uniform_int_distribution<> uniform_int_distribution(0, location_count);
+	std::uniform_int_distribution<> uniform_int_distribution(0, location_count-1);
 
 	for (Individual& current_individual : individuals) {
 		current_individual.set_location(uniform_int_distribution(mersenne_twister_engine)); // Assign the random location
@@ -96,6 +96,8 @@ LocationUndirectedGraph GraphHandler::get_location_undirected_graph_from_file(st
 
 		size_t first_edge = stoull(string_vector[0]);
 		size_t second_edge = stoull(string_vector[1]);
+//////////////////////////////////##############################
+		size_t weight = stod(string_vector[2]);
 
 		if (map_location_to_index.find(first_edge) == map_location_to_index.end()) {
 			// not found
@@ -109,7 +111,8 @@ LocationUndirectedGraph GraphHandler::get_location_undirected_graph_from_file(st
 			current_location_index++;
 		}
 
-		add_edge(map_location_to_index[first_edge], map_location_to_index[second_edge], location_graph);
+		add_edge(map_location_to_index[first_edge], map_location_to_index[second_edge], weight, location_graph);
+//////////////////////////////////##############################		
 	}
 
 	input_file_stream.close();
