@@ -24,7 +24,7 @@ void writeVectorToFile(const std::vector<std::vector<int>>& myVector, const std:
     // Write the vector to the file
     for (const auto& row : myVector) {
         for (const int& element : row) {
-            outputFile << element << " ";
+            outputFile << element << ",";
         }
         outputFile << std::endl;
     }
@@ -165,11 +165,11 @@ void simulate_parallel(int individual_count, int location_count, std::uint8_t to
 	
 
 	
-	writeVectorToFile(epoch_population, "output_population.txt");
+	writeVectorToFile(epoch_population, "output_population_parallel.txt");
 
 ///////////################################################################		
 	if (SAVE_CSV)
-		GraphHandler::save_epoch_statistics_to_csv("output_statistics.csv", epoch_statistics);
+		GraphHandler::save_epoch_statistics_to_csv("output_statistics_parallel.csv", epoch_statistics);
 	if (SAVE_GRAPHVIZ)
 		GraphHandler::save_undirected_graph_to_graphviz_file("individualGraph.dot", individual_graph);
 	if (SHOW_EPIDEMIC_RESULTS)
@@ -199,7 +199,9 @@ void simulate_serial_naive(int individual_count, int location_count, int total_e
 		std::cout<<std::endl;
 
 	}*/
-	
+///////////################################################################
+	vector<vector<int>> epoch_population;	
+///////////################################################################	
 
 	// Repeat for all the epochs
 	for (int current_epoch = 0; current_epoch < (total_epochs + 1); ++current_epoch) {
@@ -274,10 +276,19 @@ void simulate_serial_naive(int individual_count, int location_count, int total_e
 				++recovered_count;
 		}
 		epoch_statistics.push_back(std::make_tuple(hit_count, infected_count, recovered_count));
+///////////################################################################	
+		epoch_population.push_back((*population));
+
 	}
 	
+
+	
+	writeVectorToFile(epoch_population, "output_population_serial.txt");
+
+///////////################################################################	
+	
 	if (SAVE_CSV)
-		GraphHandler::save_epoch_statistics_to_csv("output.csv", epoch_statistics);
+		GraphHandler::save_epoch_statistics_to_csv("output_statistics_serial.csv", epoch_statistics);
 	if (SAVE_GRAPHVIZ)
 		GraphHandler::save_undirected_graph_to_graphviz_file("individualGraph.dot", individual_graph);
 	if (SHOW_EPIDEMIC_RESULTS)
@@ -316,7 +327,7 @@ int main() {
 		//individual_count *= 10;
 		individual_count = 10000; // population of Antwerp is 503138
 		//total_epochs *= 5;
-		total_epochs = 100; // 30 days
+		total_epochs = 30; // 30 days
 		thread_count = 4;
 		//repeat_count *= 4;
 		repeat_count = 1;
@@ -348,12 +359,14 @@ int main() {
 		std::cout << "Running serial...";
 		total_time = 0.0;
 		for (std::uint8_t current_repeat = 0; current_repeat != repeat_count; ++current_repeat) {
-			reset_input(input_graph_filename, individual_count, location_count, edge_count, individual_graph, individuals); // Reset individuals
+			
 			time_start = omp_get_wtime();
 			simulate_serial_naive(individual_count, location_count, total_epochs, individual_graph, individuals);
 			time_end = omp_get_wtime() - time_start;
 			total_time += time_end;
 			cout << ".";
+			reset_input(input_graph_filename, individual_count, location_count, edge_count, individual_graph, individuals); // Reset individuals
+
 		}
 		cout << (total_time / repeat_count) * 1000.0 << " ms" << endl;
 
@@ -361,7 +374,7 @@ int main() {
 		cout << endl << "Running with OpenMP...";
 		total_time = 0.0;
 		for (std::uint8_t current_repeat = 0; current_repeat != repeat_count; ++current_repeat) {
-			reset_input(input_graph_filename, individual_count, location_count, edge_count, individual_graph, individuals); // Reset individuals
+			
 			time_start = omp_get_wtime();
 			simulate_parallel(individual_count, location_count, total_epochs, individual_graph, individuals, epoch_statistics);
 			time_end = omp_get_wtime() - time_start;
@@ -369,6 +382,8 @@ int main() {
 			if (!GraphHandler::assert_epidemic_results(individual_count, epoch_statistics))
 				cout << "Error." << endl;
 			cout << ".";
+			reset_input(input_graph_filename, individual_count, location_count, edge_count, individual_graph, individuals); // Reset individuals
+
 		}
 		cout << (total_time / repeat_count) * 1000.0 << " ms" << endl;
 	

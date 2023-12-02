@@ -29,20 +29,13 @@ int Individual::get_random_location(map<int,int> weights,std::vector<int>& node_
 	// Create a discrete distribution based on edge weights
     std::vector<double> probabilities;
 
-	//std::cout<<"chk1"<<std::endl;
 // mod by Alan ============================================================ 
     for (int neighbor : node_neighbours) {
-		//td::cout<<"chk2:　"<<neighbor<<std::endl;
 		int n = (*population)[neighbor]; //+2 to avoid problem when population == 0 or 1
-		//std::cout<<"chk3:　"<<neighbor<<std::endl;
 		int Total = individual_count;
 		int Locations = location_count;
-		//std::cout<<"chk4:　"<<neighbor<<std::endl;
 		double weight1 = exp( -pow(((n-Total/sqrt(Locations))/(Total/sqrt(Locations)/3)),2) );
 		double weight2 = exp( -pow((n/(Total/sqrt(Locations)/4)),2) );
-		//std::cout<<"chk5:　"<<neighbor<<std::endl;
-		//std::cout<<"chk6:　"<<neighbor<<std::endl;
-		//cout<<"neighbor: "<<neighbor<<"weights.at(neighbor): "<<weights[neighbor]<<endl;
         probabilities.push_back(weights[neighbor]+weight1+weight2);
     }
 // end mod by Alan ========================================================
