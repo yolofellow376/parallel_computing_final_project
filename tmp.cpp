@@ -8,41 +8,44 @@
 #include <fstream>
 #include <numeric>
 
-
-using namespace boost;
 using namespace std;
+using namespace boost;
 
-vector<int>* population = nullptr;
+std::vector<int>* population = nullptr;
 
-//write function
-void write_vector(vector<vector<int>>& myVector,  string& filename) {
-    ofstream outputFile(filename);
+void writeVectorToFile(const std::vector<std::vector<int>>& myVector, const std::string& filename) {
+    std::ofstream outputFile(filename);
 
-    // write the element to the file
-    for (auto& row : myVector) {
-        for (int& element : row) {
+    if (!outputFile.is_open()) {
+        std::cerr << "Error: Unable to open the file: " << filename << std::endl;
+        return;
+    }
+
+    // Write the vector to the file
+    for (const auto& row : myVector) {
+        for (const int& element : row) {
             outputFile << element << ",";
         }
-        outputFile << endl;
+        outputFile << std::endl;
     }
+
     outputFile.close();
 }
 
-void simulate_parallel(int individual_count, int location_count, int total_epochs, const LocationUndirectedGraph& individual_graph,
-	vector<Individual>& individuals) {
+void simulate_parallel(int individual_count, int location_count, std::uint8_t total_epochs, const LocationUndirectedGraph& individual_graph,
+	vector<Individual>& individuals, vector<std::tuple<int, int, int>>& epoch_statistics) {
 
 	int index = 0;
-	int max_index = int(individuals.size());
-	int chunk = int(max_index / DEFAULT_NUMBER_OF_THREADS);
+	int max_index = static_cast<int>(individuals.size());
+	int chunk = static_cast<int>(max_index / DEFAULT_NUMBER_OF_THREADS);
 ///////////################################################################
 	vector<vector<int>> epoch_population;	
-	vector<std::tuple<int, int, int>> epoch_statistics;
 ///////////################################################################
 	// Generate a look up map with the neighbouring nodes for each graph node
 	boost::unordered_map<int, vector<int>> neighborhood_lookup_map = GraphHandler::get_node_neighborhood_lookup_map(individual_graph);
 
 	// Repeat for all the epochs
-	for (int epoch = 0; epoch < total_epochs; epoch++) {
+	for (std::uint8_t current_epoch = 0; current_epoch < total_epochs; ++current_epoch) {
 ///////////################################################################
 
 		population = new vector<int>(location_count, 0);
@@ -70,9 +73,9 @@ void simulate_parallel(int individual_count, int location_count, int total_epoch
 			}
 			
 		} // Implicit Barrier
-		//int sum = accumulate(population->begin(), population->end(), 0);
+		//int sum = std::accumulate(population->begin(), population->end(), 0);
     	// Print the sum
-   // 	cout << "total population: " << sum << endl;
+   // 	std::cout << "total population: " << sum << std::endl;
 
 ///////////################################################################	
 		
@@ -81,7 +84,7 @@ void simulate_parallel(int individual_count, int location_count, int total_epoch
 		#pragma omp parallel private(index) shared(individuals, neighborhood_lookup_map) firstprivate(chunk, max_index)
 		{
 			#pragma omp for schedule(static, chunk) nowait
-			for (index = 0; index < max_index; index++) {
+			for (index = 0; index < max_index; ++index) {
 
 				Individual current_individual = individuals[index]; // Thread local variable
 				int current_location = current_individual.get_location(); // Thread local variable
@@ -90,8 +93,8 @@ void simulate_parallel(int individual_count, int location_count, int total_epoch
 				
 				map<int,int> weights;
 				boost::graph_traits<LocationUndirectedGraph>::out_edge_iterator ei, ei_end;
-				for (tie(ei, ei_end) = out_edges(current_individual.get_location(), individual_graph); ei != ei_end; ei++) {
-					//cout << "Edge: " << *ei << ", Weight: " << weight_map[*ei] << endl;
+				for (tie(ei, ei_end) = out_edges(current_individual.get_location(), individual_graph); ei != ei_end; ++ei) {
+					//std::cout << "Edge: " << *ei << ", Weight: " << weight_map[*ei] << std::endl;
 					auto target_vertex = boost::target(*ei, individual_graph);
 					weights[target_vertex]= weight_map[*ei];
 
@@ -108,11 +111,11 @@ void simulate_parallel(int individual_count, int location_count, int total_epoch
 		{
 			// Since we only change individuals that are "chunked" by index for each thread, there is no need for critical/atomic region
 			#pragma omp for schedule(auto) nowait
-			for (index = 0; index < max_index; index++) {
+			for (index = 0; index < max_index; ++index) {
 				if (!individuals[index].is_infected()) { // Don't copy the shared memory element, just check a boolean
 					Individual current_individual = individuals[index]; // Thread local variable
 					int affecting_index;
-					for (affecting_index = 0; affecting_index < individual_count; affecting_index++) {
+					for (affecting_index = 0; affecting_index < individual_count; ++affecting_index) {
 
 						if (individuals[affecting_index].is_infected()) { // First do the binary check, then do the comparison because it is faster
 							Individual affecting_individual = individuals[affecting_index]; // Thread local variable
@@ -138,21 +141,21 @@ void simulate_parallel(int individual_count, int location_count, int total_epoch
 		{
 			// Since we only change individuals that are "chunked" by index for each thread, there is no need for critical/atomic region
 			#pragma omp for schedule(static, chunk) nowait
-			for (index = 0; index < max_index; index++) {		
+			for (index = 0; index < max_index; ++index) {		
 				Individual current_individual = individuals[index]; // Thread local variable
 				current_individual.advance_epoch();	// Check individuals for the number of epochs they're infected and tag them as healed and recovered if a threshold disease_duration is passed					
 				individuals[index] = current_individual; // Save individual back to the shared memory space
 				// Near the end of the parallel region, perform reduction. Gather statistics about the current advance_epoch : what is the fraction of infected and hit individual
 				if (current_individual.is_infected())
-					infected_count++;
+					++infected_count;
 				if (current_individual.is_hit())
-					hit_count++;
+					++hit_count;
 				if (current_individual.is_recovered())
-					recovered_count++;
+					++recovered_count;
 			}
 		} // Implicit Barrier
 
-		epoch_statistics.push_back(make_tuple(hit_count, infected_count, recovered_count)); // Store tuple of statistics for the current epoch
+		epoch_statistics.push_back(std::make_tuple(hit_count, infected_count, recovered_count)); // Store tuple of statistics for the current epoch
 
 
 ///////////################################################################	
@@ -161,8 +164,8 @@ void simulate_parallel(int individual_count, int location_count, int total_epoch
 	}
 	
 
-	string filename = "output_population_parallel.txt";
-	write_vector(epoch_population, filename);
+	
+	writeVectorToFile(epoch_population, "output_population_parallel.txt");
 
 ///////////################################################################		
 	if (SAVE_CSV)
@@ -277,9 +280,7 @@ void simulate_serial_naive(int individual_count, int location_count, int total_e
 		epoch_population.push_back((*population));
 
 	}
-	string filename = "output_population_serial.txt";
-	write_vector(epoch_population, filename);
-
+	writeVectorToFile(epoch_population, "output_population_serial.txt");
 ///////////################################################################	
 	
 	if (SAVE_CSV)
@@ -290,23 +291,18 @@ void simulate_serial_naive(int individual_count, int location_count, int total_e
 		GraphHandler::show_epidemic_results(individual_count, epoch_statistics);
 }
 
-
 void reset_input(string filename, int individual_count, int& location_count, int& edge_count, LocationUndirectedGraph& individual_graph, vector<Individual>& individuals) {
-	
-	//load graph nodes and edges from filename
-	individual_graph = GraphHandler::get_location_undirected_graph_from_file(filename); 
+	individual_graph = GraphHandler::get_location_undirected_graph_from_file(filename); // Read graph from File OR
+	//individual_graph = GraphHandler::get_sample_location_undirected_graph(); // Generate sample graph
 
-	//get graph information
 	location_count = boost::num_vertices(individual_graph);
 	edge_count = boost::num_edges(individual_graph);
 
-	//generate random positions for each individual
-	individuals = GraphHandler::get_random_individuals(individual_count, location_count); 
+	individuals = GraphHandler::get_random_individuals(individual_count, location_count); // Randomize positions of individuals
     /*for(auto ind:individuals){
         cout<<ind.get_location()<<" ";
     }*/
-
-	//randomly infect some individuals
+	// Infect initial individuals
 	for (int i = 0; i < INITIAL_INFECTED_COUNT; ++i) {
 		individuals[i].infect();
 	}
@@ -317,64 +313,81 @@ int main() {
 
 	
 
-		// Experiment parameters
-		int max_thread = 4; //DEFAULT_NUMBER_OF_THREADS;
-		int individual_count = 1000; //DEFAULT_INDIVIDUAL_COUNT;
-		int total_epochs = 30; //DEFAULT_TOTAL_EPOCHS;
+		// Get the default simulation values
+		int thread_count = DEFAULT_NUMBER_OF_THREADS;
+		int individual_count = DEFAULT_INDIVIDUAL_COUNT;
+		std::uint8_t total_epochs = DEFAULT_TOTAL_EPOCHS;
+		std::uint8_t repeat_count = DEFAULT_REPEAT_COUNT;
 		string input_graph_filename = "myedge.edges";//"minimumantwerp.edges"; // Read locations from the full Antwerp graph or from a minimal version (500 nodes)
 
-	
+		//individual_count *= 10;
+		individual_count = 20000; // population of Antwerp is 503138
+		//total_epochs *= 5;
+		total_epochs = 30; // 30 days
+		thread_count = 4;
+		//repeat_count *= 4;
+		repeat_count = 1;
 
-		// Cout experiments parameters
-		cout << "----- Dragonfly model simulation -----" << endl;
-		cout << "Max number of threads: " << max_thread << endl;
-		cout << "Number of individual: " << individual_count << endl;
-		cout << "Total Epochs: " << total_epochs << endl;
-		cout << "Graph from file: " << input_graph_filename << endl;
-		
+		// Set the thread count
+		//omp_set_num_threads(thread_count);
 
-		//Initialization
-		LocationUndirectedGraph individual_graph; 
+		// Print calculation info
+		std::cout << "----- Infectious Disease Modelling -----" << std::endl;
+		std::cout << "Number of threads: " << thread_count << std::endl;
+		std::cout << "Individual Count: " << individual_count << std::endl;
+		std::cout << "Total Epochs: " << static_cast<int>(total_epochs) << std::endl;
+		std::cout << "Graph from file: " << input_graph_filename << std::endl;
+		std::cout << "Repeat count: " << static_cast<int>(repeat_count) << std::endl;
+
+		LocationUndirectedGraph individual_graph; //Graph of location nodes & connections
 		int location_count, edge_count;
-		vector<Individual> individuals; 
-		
+		vector<Individual> individuals; // Population of healthy individuals
+		vector<std::tuple<int, int, int>> epoch_statistics;
 
 		// Reset individuals
 		reset_input(input_graph_filename, individual_count, location_count, edge_count, individual_graph, individuals);
-		cout << "Number of nodes: " << location_count << endl; 
-		cout << "Number of edges: " << edge_count << endl; 
+		std::cout << "Location Count: " << location_count << std::endl; // print info once
+		std::cout << "Edge Count: " << edge_count << std::endl; // print info once
 
-		//Record time
-		double time_start;
+		double time_start, time_end, total_time;
 
-///////////################################################################	
 		// Serial
-		cout << "Serial version...";
-		
-		time_start = omp_get_wtime();
-		simulate_serial_naive(individual_count, location_count, total_epochs, individual_graph, individuals);
-		cout << "Serial time = " << (omp_get_wtime() - time_start) * 1000.0 << " ms" << endl;
+		std::cout << "Running serial...";
+		total_time = 0.0;
+		for (std::uint8_t current_repeat = 0; current_repeat != repeat_count; ++current_repeat) {
+			
+			time_start = omp_get_wtime();
+			simulate_serial_naive(individual_count, location_count, total_epochs, individual_graph, individuals);
+			time_end = omp_get_wtime() - time_start;
+			total_time += time_end;
+			cout << ".";
+			reset_input(input_graph_filename, individual_count, location_count, edge_count, individual_graph, individuals); // Reset individuals
 
-///////////################################################################	
+		}
+		cout << (total_time / repeat_count) * 1000.0 << " ms" << endl;
 
-		// Reset individuals
-		reset_input(input_graph_filename, individual_count, location_count, edge_count, individual_graph, individuals);
 
-		// Parallel using OpenMP
-		for(int thread = max_thread; thread >= 1;){
+		// OpenMP
+		for(int thread=64;thread>=1;){
 
 			omp_set_num_threads(thread);
 
-			cout << endl << "Running with OpenMP using "<< thread <<" threads ...";
+			cout << endl << "Running with OpenMP...";
+			cout << thread;
+			total_time = 0.0;
+			for (std::uint8_t current_repeat = 0; current_repeat != repeat_count; ++current_repeat) {
 				
-				
-			time_start = omp_get_wtime();
-			simulate_parallel(individual_count, location_count, total_epochs, individual_graph, individuals);
+				time_start = omp_get_wtime();
+				simulate_parallel(individual_count, location_count, total_epochs, individual_graph, individuals, epoch_statistics);
+				time_end = omp_get_wtime() - time_start;
+				total_time += time_end;
+				if (!GraphHandler::assert_epidemic_results(individual_count, epoch_statistics))
+					cout << "Error." << endl;
+				cout << ".";
+				reset_input(input_graph_filename, individual_count, location_count, edge_count, individual_graph, individuals); // Reset individuals
 
-			// Reset individuals
-			reset_input(input_graph_filename, individual_count, location_count, edge_count, individual_graph, individuals); 
-
-			cout << "Parallel time with "<<thread<<" threads = "<< (omp_get_wtime() - time_start) * 1000.0 << " ms" << endl;
+			}
+			cout << (total_time / repeat_count) * 1000.0 << " ms" << endl;
 			thread = thread /2;
 		}
 		
