@@ -13,7 +13,7 @@ public:
 	void recover();
 	void advance_epoch();
 	void try_infect();
-	void move(std::vector<int>& new_locations, std::map<int,int> weights);
+	void move(std::vector<int>& new_locations, std::map<int,int> weights, std::vector<int>* population, int individual_count, int location_count);
 	void set_location(int location);
 	int get_location() const;
 	bool is_infected() const;
@@ -27,7 +27,7 @@ private:
 	int location_; // Refers to the graph node that represents the current location of the individual
 	IndividualParameters parameters_;
 	static float get_random_infect_chance();
-	static int get_random_location(std::map<int,int> weights,std::vector<int>& node_neighbours);
+	static int get_random_location(std::map<int,int> weights,std::vector<int>& node_neighbours, std::vector<int>* population, int individual_count, int location_count);
 };
 
 // Infect the individual

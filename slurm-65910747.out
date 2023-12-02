@@ -1,0 +1,454 @@
+Individual.cpp:8:6: error: ‘Individual’ has not been declared
+    8 | void Individual::try_infect() {
+      |      ^~~~~~~~~~
+Individual.cpp: In function ‘void try_infect()’:
+Individual.cpp:10:7: error: ‘infected_’ was not declared in this scope
+   10 |  if (!infected_) {
+      |       ^~~~~~~~~
+Individual.cpp:11:7: error: ‘get_random_infect_chance’ was not declared in this scope
+   11 |   if (get_random_infect_chance() < parameters_.Infectiosity)
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~
+Individual.cpp:11:36: error: ‘parameters_’ was not declared in this scope
+   11 |   if (get_random_infect_chance() < parameters_.Infectiosity)
+      |                                    ^~~~~~~~~~~
+Individual.cpp:12:4: error: ‘infect’ was not declared in this scope
+   12 |    infect();
+      |    ^~~~~~
+Individual.cpp: At global scope:
+Individual.cpp:16:7: error: ‘Individual’ has not been declared
+   16 | float Individual::get_random_infect_chance() {
+      |       ^~~~~~~~~~
+Individual.cpp:25:5: error: ‘Individual’ has not been declared
+   25 | int Individual::get_random_location(map<int,int> weights,std::vector<int>& node_neighbours, std::vector<int>* population, int individual_count, int location_count) {
+      |     ^~~~~~~~~~
+Individual.cpp:67:6: error: ‘Individual’ has not been declared
+   67 | void Individual::move(std::vector<int>& node_neighbours, map<int,int> weights, std::vector<int>* population, int individual_count, int location_count) {
+      |      ^~~~~~~~~~
+Individual.cpp: In function ‘void move(std::vector<int>&, std::map<int, int>, std::vector<int>*, int, int)’:
+Individual.cpp:70:28: error: ‘location_’ was not declared in this scope; did you mean ‘localtime_r’?
+   70 |  node_neighbours.push_back(location_); // Add current location in the new locations vector
+      |                            ^~~~~~~~~
+      |                            localtime_r
+In file included from GraphHandler.h:4,
+                 from GraphHandler.cpp:6:
+Individual.h:13:3: error: conflicting declaration ‘typedef class boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, boost::no_property, boost::property<boost::edge_weight_t, double> > LocationUndirectedGraph’
+   13 | > LocationUndirectedGraph;
+      |   ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from GraphHandler.cpp:5:
+Settings.h:13:3: note: previous declaration as ‘typedef class boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, boost::no_property, boost::property<boost::edge_weight_t, double> > LocationUndirectedGraph’
+   13 | > LocationUndirectedGraph;
+      |   ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from GraphHandler.h:4,
+                 from GraphHandler.cpp:6:
+Individual.h:15:19: error: redefinition of ‘const bool SAVE_CSV’
+   15 | static const bool SAVE_CSV = false;
+      |                   ^~~~~~~~
+In file included from GraphHandler.cpp:5:
+Settings.h:17:19: note: ‘const bool SAVE_CSV’ previously defined here
+   17 | static const bool SAVE_CSV = false;
+      |                   ^~~~~~~~
+In file included from GraphHandler.h:4,
+                 from GraphHandler.cpp:6:
+Individual.h:16:19: error: redefinition of ‘const bool SAVE_GRAPHVIZ’
+   16 | static const bool SAVE_GRAPHVIZ = false;
+      |                   ^~~~~~~~~~~~~
+In file included from GraphHandler.cpp:5:
+Settings.h:18:19: note: ‘const bool SAVE_GRAPHVIZ’ previously defined here
+   18 | static const bool SAVE_GRAPHVIZ = false;
+      |                   ^~~~~~~~~~~~~
+In file included from GraphHandler.h:4,
+                 from GraphHandler.cpp:6:
+Individual.h:17:19: error: redefinition of ‘const bool SHOW_EPIDEMIC_RESULTS’
+   17 | static const bool SHOW_EPIDEMIC_RESULTS = false;
+      |                   ^~~~~~~~~~~~~~~~~~~~~
+In file included from GraphHandler.cpp:5:
+Settings.h:19:19: note: ‘const bool SHOW_EPIDEMIC_RESULTS’ previously defined here
+   19 | static const bool SHOW_EPIDEMIC_RESULTS = false;
+      |                   ^~~~~~~~~~~~~~~~~~~~~
+In file included from GraphHandler.h:4,
+                 from GraphHandler.cpp:6:
+Individual.h:19:18: error: redefinition of ‘const int DEFAULT_NUMBER_OF_THREADS’
+   19 | static const int DEFAULT_NUMBER_OF_THREADS = 4;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from GraphHandler.cpp:5:
+Settings.h:21:18: note: ‘const int DEFAULT_NUMBER_OF_THREADS’ previously defined here
+   21 | static const int DEFAULT_NUMBER_OF_THREADS = 4;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from GraphHandler.h:4,
+                 from GraphHandler.cpp:6:
+Individual.h:21:27: error: redefinition of ‘const uint8_t DEFAULT_TOTAL_EPOCHS’
+   21 | static const std::uint8_t DEFAULT_TOTAL_EPOCHS = 30;
+      |                           ^~~~~~~~~~~~~~~~~~~~
+In file included from GraphHandler.cpp:5:
+Settings.h:23:27: note: ‘const uint8_t DEFAULT_TOTAL_EPOCHS’ previously defined here
+   23 | static const std::uint8_t DEFAULT_TOTAL_EPOCHS = 30;
+      |                           ^~~~~~~~~~~~~~~~~~~~
+In file included from GraphHandler.h:4,
+                 from GraphHandler.cpp:6:
+Individual.h:22:18: error: redefinition of ‘const int DEFAULT_INDIVIDUAL_COUNT’
+   22 | static const int DEFAULT_INDIVIDUAL_COUNT = 1000;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~
+In file included from GraphHandler.cpp:5:
+Settings.h:24:18: note: ‘const int DEFAULT_INDIVIDUAL_COUNT’ previously defined here
+   24 | static const int DEFAULT_INDIVIDUAL_COUNT = 1000;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~
+In file included from GraphHandler.h:4,
+                 from GraphHandler.cpp:6:
+Individual.h:24:18: error: redefinition of ‘const int INITIAL_INFECTED_COUNT’
+   24 | static const int INITIAL_INFECTED_COUNT = 15;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~
+In file included from GraphHandler.cpp:5:
+Settings.h:26:18: note: ‘const int INITIAL_INFECTED_COUNT’ previously defined here
+   26 | static const int INITIAL_INFECTED_COUNT = 15;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~
+In file included from GraphHandler.h:4,
+                 from GraphHandler.cpp:6:
+Individual.h:26:27: error: redefinition of ‘const uint8_t DEFAULT_REPEAT_COUNT’
+   26 | static const std::uint8_t DEFAULT_REPEAT_COUNT = 4;
+      |                           ^~~~~~~~~~~~~~~~~~~~
+In file included from GraphHandler.cpp:5:
+Settings.h:28:27: note: ‘const uint8_t DEFAULT_REPEAT_COUNT’ previously defined here
+   28 | static const std::uint8_t DEFAULT_REPEAT_COUNT = 4;
+      |                           ^~~~~~~~~~~~~~~~~~~~
+In file included from GraphHandler.h:4,
+                 from GraphHandler.cpp:6:
+Individual.h:28:18: error: redefinition of ‘const int CHUNK_SIZE_DIVIDER’
+   28 | static const int CHUNK_SIZE_DIVIDER = 10;
+      |                  ^~~~~~~~~~~~~~~~~~
+In file included from GraphHandler.cpp:5:
+Settings.h:30:18: note: ‘const int CHUNK_SIZE_DIVIDER’ previously defined here
+   30 | static const int CHUNK_SIZE_DIVIDER = 10;
+      |                  ^~~~~~~~~~~~~~~~~~
+In file included from GraphHandler.cpp:6:
+GraphHandler.h:13:21: error: ‘Individual’ was not declared in this scope
+   13 |  static std::vector<Individual> get_random_individuals(int individual_count, int location_count);
+      |                     ^~~~~~~~~~
+GraphHandler.h:13:31: error: template argument 1 is invalid
+   13 |  static std::vector<Individual> get_random_individuals(int individual_count, int location_count);
+      |                               ^
+GraphHandler.h:13:31: error: template argument 2 is invalid
+GraphHandler.cpp:53:13: error: ‘Individual’ was not declared in this scope
+   53 | std::vector<Individual> GraphHandler::get_random_individuals(int individual_count, int location_count) {
+      |             ^~~~~~~~~~
+GraphHandler.cpp:53:23: error: template argument 1 is invalid
+   53 | std::vector<Individual> GraphHandler::get_random_individuals(int individual_count, int location_count) {
+      |                       ^
+GraphHandler.cpp:53:23: error: template argument 2 is invalid
+GraphHandler.cpp: In static member function ‘static int GraphHandler::get_random_individuals(int, int)’:
+GraphHandler.cpp:56:14: error: ‘Individual’ was not declared in this scope
+   56 |  std::vector<Individual> individuals(individual_count, Individual());
+      |              ^~~~~~~~~~
+GraphHandler.cpp:56:24: error: template argument 1 is invalid
+   56 |  std::vector<Individual> individuals(individual_count, Individual());
+      |                        ^
+GraphHandler.cpp:56:24: error: template argument 2 is invalid
+GraphHandler.cpp:56:68: error: expression list treated as compound expression in initializer [-fpermissive]
+   56 |  std::vector<Individual> individuals(individual_count, Individual());
+      |                                                                    ^
+GraphHandler.cpp:63:38: error: found ‘:’ in nested-name-specifier, expected ‘::’
+   63 |  for (Individual& current_individual : individuals) {
+      |                                      ^
+      |                                      ::
+GraphHandler.cpp:63:19: error: ‘current_individual’ has not been declared
+   63 |  for (Individual& current_individual : individuals) {
+      |                   ^~~~~~~~~~~~~~~~~~
+GraphHandler.cpp:66:2: error: expected primary-expression before ‘return’
+   66 |  return individuals;
+      |  ^~~~~~
+GraphHandler.cpp:65:3: error: expected ‘;’ before ‘return’
+   65 |  }
+      |   ^
+      |   ;
+   66 |  return individuals;
+      |  ~~~~~~
+GraphHandler.cpp:66:2: error: expected primary-expression before ‘return’
+   66 |  return individuals;
+      |  ^~~~~~
+GraphHandler.cpp:65:3: error: expected ‘)’ before ‘return’
+   65 |  }
+      |   ^
+      |   )
+   66 |  return individuals;
+      |  ~~~~~~
+GraphHandler.cpp:63:6: note: to match this ‘(’
+   63 |  for (Individual& current_individual : individuals) {
+      |      ^
+GraphHandler.cpp:67:1: warning: control reaches end of non-void function [-Wreturn-type]
+   67 | }
+      | ^
+In file included from GraphHandler.h:3,
+                 from Infect.cpp:6:
+Settings.h:13:3: error: conflicting declaration ‘typedef class boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, boost::no_property, boost::property<boost::edge_weight_t, double> > LocationUndirectedGraph’
+   13 | > LocationUndirectedGraph;
+      |   ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from Infect.cpp:5:
+Individual.h:13:3: note: previous declaration as ‘typedef class boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, boost::no_property, boost::property<boost::edge_weight_t, double> > LocationUndirectedGraph’
+   13 | > LocationUndirectedGraph;
+      |   ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from GraphHandler.h:3,
+                 from Infect.cpp:6:
+Settings.h:17:19: error: redefinition of ‘const bool SAVE_CSV’
+   17 | static const bool SAVE_CSV = false;
+      |                   ^~~~~~~~
+In file included from Infect.cpp:5:
+Individual.h:15:19: note: ‘const bool SAVE_CSV’ previously defined here
+   15 | static const bool SAVE_CSV = false;
+      |                   ^~~~~~~~
+In file included from GraphHandler.h:3,
+                 from Infect.cpp:6:
+Settings.h:18:19: error: redefinition of ‘const bool SAVE_GRAPHVIZ’
+   18 | static const bool SAVE_GRAPHVIZ = false;
+      |                   ^~~~~~~~~~~~~
+In file included from Infect.cpp:5:
+Individual.h:16:19: note: ‘const bool SAVE_GRAPHVIZ’ previously defined here
+   16 | static const bool SAVE_GRAPHVIZ = false;
+      |                   ^~~~~~~~~~~~~
+In file included from GraphHandler.h:3,
+                 from Infect.cpp:6:
+Settings.h:19:19: error: redefinition of ‘const bool SHOW_EPIDEMIC_RESULTS’
+   19 | static const bool SHOW_EPIDEMIC_RESULTS = false;
+      |                   ^~~~~~~~~~~~~~~~~~~~~
+In file included from Infect.cpp:5:
+Individual.h:17:19: note: ‘const bool SHOW_EPIDEMIC_RESULTS’ previously defined here
+   17 | static const bool SHOW_EPIDEMIC_RESULTS = false;
+      |                   ^~~~~~~~~~~~~~~~~~~~~
+In file included from GraphHandler.h:3,
+                 from Infect.cpp:6:
+Settings.h:21:18: error: redefinition of ‘const int DEFAULT_NUMBER_OF_THREADS’
+   21 | static const int DEFAULT_NUMBER_OF_THREADS = 4;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from Infect.cpp:5:
+Individual.h:19:18: note: ‘const int DEFAULT_NUMBER_OF_THREADS’ previously defined here
+   19 | static const int DEFAULT_NUMBER_OF_THREADS = 4;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from GraphHandler.h:3,
+                 from Infect.cpp:6:
+Settings.h:23:27: error: redefinition of ‘const uint8_t DEFAULT_TOTAL_EPOCHS’
+   23 | static const std::uint8_t DEFAULT_TOTAL_EPOCHS = 30;
+      |                           ^~~~~~~~~~~~~~~~~~~~
+In file included from Infect.cpp:5:
+Individual.h:21:27: note: ‘const uint8_t DEFAULT_TOTAL_EPOCHS’ previously defined here
+   21 | static const std::uint8_t DEFAULT_TOTAL_EPOCHS = 30;
+      |                           ^~~~~~~~~~~~~~~~~~~~
+In file included from GraphHandler.h:3,
+                 from Infect.cpp:6:
+Settings.h:24:18: error: redefinition of ‘const int DEFAULT_INDIVIDUAL_COUNT’
+   24 | static const int DEFAULT_INDIVIDUAL_COUNT = 1000;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~
+In file included from Infect.cpp:5:
+Individual.h:22:18: note: ‘const int DEFAULT_INDIVIDUAL_COUNT’ previously defined here
+   22 | static const int DEFAULT_INDIVIDUAL_COUNT = 1000;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~
+In file included from GraphHandler.h:3,
+                 from Infect.cpp:6:
+Settings.h:26:18: error: redefinition of ‘const int INITIAL_INFECTED_COUNT’
+   26 | static const int INITIAL_INFECTED_COUNT = 15;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~
+In file included from Infect.cpp:5:
+Individual.h:24:18: note: ‘const int INITIAL_INFECTED_COUNT’ previously defined here
+   24 | static const int INITIAL_INFECTED_COUNT = 15;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~
+In file included from GraphHandler.h:3,
+                 from Infect.cpp:6:
+Settings.h:28:27: error: redefinition of ‘const uint8_t DEFAULT_REPEAT_COUNT’
+   28 | static const std::uint8_t DEFAULT_REPEAT_COUNT = 4;
+      |                           ^~~~~~~~~~~~~~~~~~~~
+In file included from Infect.cpp:5:
+Individual.h:26:27: note: ‘const uint8_t DEFAULT_REPEAT_COUNT’ previously defined here
+   26 | static const std::uint8_t DEFAULT_REPEAT_COUNT = 4;
+      |                           ^~~~~~~~~~~~~~~~~~~~
+In file included from GraphHandler.h:3,
+                 from Infect.cpp:6:
+Settings.h:30:18: error: redefinition of ‘const int CHUNK_SIZE_DIVIDER’
+   30 | static const int CHUNK_SIZE_DIVIDER = 10;
+      |                  ^~~~~~~~~~~~~~~~~~
+In file included from Infect.cpp:5:
+Individual.h:28:18: note: ‘const int CHUNK_SIZE_DIVIDER’ previously defined here
+   28 | static const int CHUNK_SIZE_DIVIDER = 10;
+      |                  ^~~~~~~~~~~~~~~~~~
+In file included from Infect.cpp:6:
+GraphHandler.h:13:21: error: ‘Individual’ was not declared in this scope
+   13 |  static std::vector<Individual> get_random_individuals(int individual_count, int location_count);
+      |                     ^~~~~~~~~~
+GraphHandler.h:13:31: error: template argument 1 is invalid
+   13 |  static std::vector<Individual> get_random_individuals(int individual_count, int location_count);
+      |                               ^
+GraphHandler.h:13:31: error: template argument 2 is invalid
+Infect.cpp:18:9: error: ‘Individual’ was not declared in this scope
+   18 |  vector<Individual>& individuals, vector<std::tuple<int, int, int>>& epoch_statistics) {
+      |         ^~~~~~~~~~
+Infect.cpp:18:19: error: template argument 1 is invalid
+   18 |  vector<Individual>& individuals, vector<std::tuple<int, int, int>>& epoch_statistics) {
+      |                   ^
+Infect.cpp:18:19: error: template argument 2 is invalid
+Infect.cpp: In function ‘void simulate_parallel(int, int, uint8_t, const LocationUndirectedGraph&, int&, std::vector<std::tuple<int, int, int> >&)’:
+Infect.cpp:21:47: error: request for member ‘size’ in ‘individuals’, which is of non-class type ‘int’
+   21 |  int max_index = static_cast<int>(individuals.size());
+      |                                               ^~~~
+Infect.cpp:41:5: error: ‘Individual’ was not declared in this scope; did you mean ‘individuals’?
+   41 |     Individual current_individual = individuals[index]; // Thread local variable
+      |     ^~~~~~~~~~
+      |     individuals
+Infect.cpp:43:28: error: ‘current_individual’ was not declared in this scope
+   43 |     int current_location = current_individual.get_location(); // Thread local variable
+      |                            ^~~~~~~~~~~~~~~~~~
+Infect.cpp:51:16: error: invalid types ‘int[int]’ for array subscript
+   51 |     individuals[index] = current_individual; // Save individual back to the shared memory space
+      |                ^
+Infect.cpp:69:5: error: ‘Individual’ was not declared in this scope; did you mean ‘individuals’?
+   69 |     Individual current_individual = individuals[index]; // Thread local variable
+      |     ^~~~~~~~~~
+      |     individuals
+Infect.cpp:70:28: error: ‘current_individual’ was not declared in this scope
+   70 |     int current_location = current_individual.get_location(); // Thread local variable
+      |                            ^~~~~~~~~~~~~~~~~~
+Infect.cpp:84:16: error: invalid types ‘int[int]’ for array subscript
+   84 |     individuals[index] = current_individual; // Save individual back to the shared memory space
+      |                ^
+Infect.cpp:95:21: error: invalid types ‘int[int]’ for array subscript
+   95 |     if (!individuals[index].is_infected()) { // Don't copy the shared memory element, just check a boolean
+      |                     ^
+Infect.cpp:96:6: error: ‘Individual’ was not declared in this scope; did you mean ‘individuals’?
+   96 |      Individual current_individual = individuals[index]; // Thread local variable
+      |      ^~~~~~~~~~
+      |      individuals
+Infect.cpp:100:22: error: invalid types ‘int[int]’ for array subscript
+  100 |       if (individuals[affecting_index].is_infected()) { // First do the binary check, then do the comparison because it is faster
+      |                      ^
+Infect.cpp:101:18: error: expected ‘;’ before ‘affecting_individual’
+  101 |        Individual affecting_individual = individuals[affecting_index]; // Thread local variable
+      |                  ^~~~~~~~~~~~~~~~~~~~~
+      |                  ;
+Infect.cpp:102:12: error: ‘current_individual’ was not declared in this scope
+  102 |        if (current_individual.get_location() == affecting_individual.get_location()) { // Now do the "expensive" comparison
+      |            ^~~~~~~~~~~~~~~~~~
+Infect.cpp:102:49: error: ‘affecting_individual’ was not declared in this scope; did you mean ‘affecting_index’?
+  102 |        if (current_individual.get_location() == affecting_individual.get_location()) { // Now do the "expensive" comparison
+      |                                                 ^~~~~~~~~~~~~~~~~~~~
+      |                                                 affecting_index
+Infect.cpp:105:21: error: invalid types ‘int[int]’ for array subscript
+  105 |          individuals[index] = current_individual; // Save affecting individual back to the shared memory space
+      |                     ^
+Infect.cpp:125:5: error: ‘Individual’ was not declared in this scope; did you mean ‘individuals’?
+  125 |     Individual current_individual = individuals[index]; // Thread local variable
+      |     ^~~~~~~~~~
+      |     individuals
+Infect.cpp:126:5: error: ‘current_individual’ was not declared in this scope
+  126 |     current_individual.advance_epoch(); // Check individuals for the number of epochs they're infected and tag them as healed and recovered if a threshold disease_duration is passed
+      |     ^~~~~~~~~~~~~~~~~~
+Infect.cpp:127:16: error: invalid types ‘int[int]’ for array subscript
+  127 |     individuals[index] = current_individual; // Save individual back to the shared memory space
+      |                ^
+Infect.cpp: At global scope:
+Infect.cpp:149:144: error: ‘Individual’ was not declared in this scope
+  149 | void simulate_serial_naive(int individual_count, int location_count, int total_epochs, const LocationUndirectedGraph& individual_graph, vector<Individual>& individuals) {
+      |                                                                                                                                                ^~~~~~~~~~
+Infect.cpp:149:154: error: template argument 1 is invalid
+  149 | void simulate_serial_naive(int individual_count, int location_count, int total_epochs, const LocationUndirectedGraph& individual_graph, vector<Individual>& individuals) {
+      |                                                                                                                                                          ^
+Infect.cpp:149:154: error: template argument 2 is invalid
+Infect.cpp: In function ‘void simulate_serial_naive(int, int, int, const LocationUndirectedGraph&, int&)’:
+Infect.cpp:178:8: error: ‘Individual’ was not declared in this scope; did you mean ‘individuals’?
+  178 |   for (Individual& current_individual : individuals){
+      |        ^~~~~~~~~~
+      |        individuals
+Infect.cpp:178:39: error: found ‘:’ in nested-name-specifier, expected ‘::’
+  178 |   for (Individual& current_individual : individuals){
+      |                                       ^
+      |                                       ::
+Infect.cpp:178:20: error: ‘current_individual’ has not been declared
+  178 |   for (Individual& current_individual : individuals){
+      |                    ^~~~~~~~~~~~~~~~~~
+Infect.cpp:193:3: error: expected primary-expression before ‘for’
+  193 |   for (int individual_index = 0; individual_index != individuals.size(); ++individual_index) {
+      |   ^~~
+Infect.cpp:190:4: error: expected ‘;’ before ‘for’
+  190 |   }
+      |    ^
+      |    ;
+......
+  193 |   for (int individual_index = 0; individual_index != individuals.size(); ++individual_index) {
+      |   ~~~
+Infect.cpp:193:3: error: expected primary-expression before ‘for’
+  193 |   for (int individual_index = 0; individual_index != individuals.size(); ++individual_index) {
+      |   ^~~
+Infect.cpp:190:4: error: expected ‘)’ before ‘for’
+  190 |   }
+      |    ^
+      |    )
+......
+  193 |   for (int individual_index = 0; individual_index != individuals.size(); ++individual_index) {
+      |   ~~~
+Infect.cpp:178:7: note: to match this ‘(’
+  178 |   for (Individual& current_individual : individuals){
+      |       ^
+Infect.cpp:193:66: error: request for member ‘size’ in ‘individuals’, which is of non-class type ‘int’
+  193 |   for (int individual_index = 0; individual_index != individuals.size(); ++individual_index) {
+      |                                                                  ^~~~
+Infect.cpp:195:19: error: invalid types ‘int[int]’ for array subscript
+  195 |    if (individuals[individual_index].is_infected()) { // if the individual is infected
+      |                   ^
+Infect.cpp:198:76: error: request for member ‘size’ in ‘individuals’, which is of non-class type ‘int’
+  198 |     for (int affecting_individual = 0; affecting_individual != individuals.size(); ++affecting_individual) {
+      |                                                                            ^~~~
+Infect.cpp:202:22: error: invalid types ‘int[int]’ for array subscript
+  202 |       if (individuals[individual_index].get_location() == individuals[affecting_individual].get_location()) // in the same location
+      |                      ^
+Infect.cpp:202:70: error: invalid types ‘int[int]’ for array subscript
+  202 |       if (individuals[individual_index].get_location() == individuals[affecting_individual].get_location()) // in the same location
+      |                                                                      ^
+Infect.cpp:203:19: error: invalid types ‘int[int]’ for array subscript
+  203 |        individuals[affecting_individual].try_infect();
+      |                   ^
+Infect.cpp:212:8: error: ‘Individual’ was not declared in this scope; did you mean ‘individuals’?
+  212 |   for (Individual& current_individual : individuals) {
+      |        ^~~~~~~~~~
+      |        individuals
+Infect.cpp:212:39: error: found ‘:’ in nested-name-specifier, expected ‘::’
+  212 |   for (Individual& current_individual : individuals) {
+      |                                       ^
+      |                                       ::
+Infect.cpp:212:20: error: ‘current_individual’ has not been declared
+  212 |   for (Individual& current_individual : individuals) {
+      |                    ^~~~~~~~~~~~~~~~~~
+Infect.cpp:224:29: error: could not convert ‘epoch_statistics.std::vector<std::tuple<int, int, int> >::push_back(std::make_tuple(_Elements&& ...) [with _Elements = {int&, int&, int&}](infected_count, recovered_count))’ from ‘void’ to ‘bool’
+  224 |   epoch_statistics.push_back(std::make_tuple(hit_count, infected_count, recovered_count));
+      |   ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                             |
+      |                             void
+Infect.cpp:225:2: error: expected primary-expression before ‘}’ token
+  225 |  }
+      |  ^
+Infect.cpp:224:91: error: expected ‘)’ before ‘}’ token
+  224 |   epoch_statistics.push_back(std::make_tuple(hit_count, infected_count, recovered_count));
+      |                                                                                           ^
+      |                                                                                           )
+  225 |  }
+      |  ~                                                                                         
+Infect.cpp:212:7: note: to match this ‘(’
+  212 |   for (Individual& current_individual : individuals) {
+      |       ^
+Infect.cpp:225:2: error: expected primary-expression before ‘}’ token
+  225 |  }
+      |  ^
+Infect.cpp: At global scope:
+Infect.cpp:235:145: error: ‘Individual’ was not declared in this scope
+  235 | void reset_input(string filename, int individual_count, int& location_count, int& edge_count, LocationUndirectedGraph& individual_graph, vector<Individual>& individuals) {
+      |                                                                                                                                                 ^~~~~~~~~~
+Infect.cpp:235:155: error: template argument 1 is invalid
+  235 | void reset_input(string filename, int individual_count, int& location_count, int& edge_count, LocationUndirectedGraph& individual_graph, vector<Individual>& individuals) {
+      |                                                                                                                                                           ^
+Infect.cpp:235:155: error: template argument 2 is invalid
+Infect.cpp: In function ‘void reset_input(std::string, int, int&, int&, LocationUndirectedGraph&, int&)’:
+Infect.cpp:248:14: error: invalid types ‘int[int]’ for array subscript
+  248 |   individuals[i].infect();
+      |              ^
+Infect.cpp: In function ‘int main()’:
+Infect.cpp:285:10: error: ‘Individual’ was not declared in this scope
+  285 |   vector<Individual> individuals; // Population of healthy individuals
+      |          ^~~~~~~~~~
+Infect.cpp:285:20: error: template argument 1 is invalid
+  285 |   vector<Individual> individuals; // Population of healthy individuals
+      |                    ^
+Infect.cpp:285:20: error: template argument 2 is invalid
+/var/spool/slurmd.spool/job65910747/slurm_script: line 33: 2694774 Segmentation fault      (core dumped) ./3 > output3.txt

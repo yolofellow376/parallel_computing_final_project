@@ -1,0 +1,18 @@
+graph G {
+0[label=Location];
+1[label=Location];
+2[label=Location];
+3[label=Location];
+4[label=Location];
+5[label=Location];
+0--1 ;
+0--2 ;
+1--2 ;
+3--2 ;
+0--3 ;
+1--4 ;
+0--4 ;
+4--3 ;
+4--5 ;
+3--5 ;
+}

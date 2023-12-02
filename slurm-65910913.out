@@ -1,0 +1,29 @@
+Infect.cpp: In function ‘void simulate_serial_naive(int, int, int, const LocationUndirectedGraph&, std::vector<Individual>&)’:
+Infect.cpp:183:16: error: overloaded function with no contextual type information
+  183 |   for (index = 0; index < max_index; ++index) {
+      |                ^
+Infect.cpp:183:27: error: ‘max_index’ was not declared in this scope
+  183 |   for (index = 0; index < max_index; ++index) {
+      |                           ^~~~~~~~~
+Infect.cpp:183:40: error: no pre-increment operator for type
+  183 |   for (index = 0; index < max_index; ++index) {
+      |                                        ^~~~~
+Infect.cpp:184:47: error: no match for ‘operator[]’ (operand types are ‘std::vector<Individual>’ and ‘<unresolved overloaded function type>’)
+  184 |    Individual current_individual = individuals[index]; // Thread local variable
+      |                                               ^
+In file included from /sw/pkgs/arc/gcc/10.3.0/include/c++/10.3.0/vector:67,
+                 from Individual.h:2,
+                 from Infect.cpp:5:
+/sw/pkgs/arc/gcc/10.3.0/include/c++/10.3.0/bits/stl_vector.h:1043:7: note: candidate: ‘std::vector<_Tp, _Alloc>::reference std::vector<_Tp, _Alloc>::operator[](std::vector<_Tp, _Alloc>::size_type) [with _Tp = Individual; _Alloc = std::allocator<Individual>; std::vector<_Tp, _Alloc>::reference = Individual&; std::vector<_Tp, _Alloc>::size_type = long unsigned int]’
+ 1043 |       operator[](size_type __n) _GLIBCXX_NOEXCEPT
+      |       ^~~~~~~~
+/sw/pkgs/arc/gcc/10.3.0/include/c++/10.3.0/bits/stl_vector.h:1043:28: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘std::vector<Individual>::size_type’ {aka ‘long unsigned int’}
+ 1043 |       operator[](size_type __n) _GLIBCXX_NOEXCEPT
+      |                  ~~~~~~~~~~^~~
+/sw/pkgs/arc/gcc/10.3.0/include/c++/10.3.0/bits/stl_vector.h:1061:7: note: candidate: ‘std::vector<_Tp, _Alloc>::const_reference std::vector<_Tp, _Alloc>::operator[](std::vector<_Tp, _Alloc>::size_type) const [with _Tp = Individual; _Alloc = std::allocator<Individual>; std::vector<_Tp, _Alloc>::const_reference = const Individual&; std::vector<_Tp, _Alloc>::size_type = long unsigned int]’
+ 1061 |       operator[](size_type __n) const _GLIBCXX_NOEXCEPT
+      |       ^~~~~~~~
+/sw/pkgs/arc/gcc/10.3.0/include/c++/10.3.0/bits/stl_vector.h:1061:28: note:   no known conversion for argument 1 from ‘<unresolved overloaded function type>’ to ‘std::vector<Individual>::size_type’ {aka ‘long unsigned int’}
+ 1061 |       operator[](size_type __n) const _GLIBCXX_NOEXCEPT
+      |                  ~~~~~~~~~~^~~
+/var/spool/slurmd.spool/job65910913/slurm_script: line 33: 2707970 Segmentation fault      (core dumped) ./3 > output3.txt

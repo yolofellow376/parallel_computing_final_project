@@ -14,8 +14,8 @@ using namespace boost;
 std::vector<int>* population = nullptr;
 
 
-void simulate_parallel(int individual_count, std::uint8_t total_epochs, const LocationUndirectedGraph& individual_graph,
-	vector<Individual>& individuals, vector<std::tuple<int, int, int>>& epoch_statistics, int location_count) {
+void simulate_parallel(int individual_count, int location_count, std::uint8_t total_epochs, const LocationUndirectedGraph& individual_graph,
+	vector<Individual>& individuals, vector<std::tuple<int, int, int>>& epoch_statistics) {
 
 	int index = 0;
 	int max_index = static_cast<int>(individuals.size());
@@ -79,7 +79,7 @@ void simulate_parallel(int individual_count, std::uint8_t total_epochs, const Lo
 					weights[target_vertex]= weight_map[*ei];
 
 				}
-				current_individual.move(node_neighbours,weights); // Stay in the same spot or move to a neighbouring node
+				current_individual.move(node_neighbours,weights,population,individual_count,location_count); // Stay in the same spot or move to a neighbouring node
                 /////////////#################
 				individuals[index] = current_individual; // Save individual back to the shared memory space
 			}
@@ -146,7 +146,7 @@ void simulate_parallel(int individual_count, std::uint8_t total_epochs, const Lo
 		GraphHandler::show_epidemic_results(individual_count, epoch_statistics);
 }
 
-void simulate_serial_naive(int individual_count, int total_epochs, const LocationUndirectedGraph& individual_graph, vector<Individual>& individuals) {
+void simulate_serial_naive(int individual_count, int location_count, int total_epochs, const LocationUndirectedGraph& individual_graph, vector<Individual>& individuals) {
 	
 	// Statistics vector, index is epoch
 	vector<std::tuple<int, int, int>> epoch_statistics;
@@ -154,8 +154,44 @@ void simulate_serial_naive(int individual_count, int total_epochs, const Locatio
 	// Generate a look up map with the neighbouring nodes for each graph node
 	boost::unordered_map<int, vector<int>> neighborhood_lookup_map = GraphHandler::get_node_neighborhood_lookup_map(individual_graph);
 
+	/*
+	for(auto a:neighborhood_lookup_map){
+
+		int current=a.first;
+
+		vector<int> v=a.second;
+
+		std::cout<<"current: " <<current<<" = ";
+		for(auto b:v){
+
+			std::cout<<b<<" ";
+		}
+		std::cout<<std::endl;
+
+	}*/
+	
+
 	// Repeat for all the epochs
 	for (int current_epoch = 0; current_epoch < (total_epochs + 1); ++current_epoch) {
+
+///////////################################################################
+
+		population = new vector<int>(location_count, 0);
+		
+		
+			
+		for (Individual& current_individual : individuals){
+			int current_location = current_individual.get_location(); // Thread local variable
+			(*population)[current_location] += 1;
+		}
+		int sum = std::accumulate(population->begin(), population->end(), 0);
+    	// Print the sum
+    	std::cout << "total population: " << sum << std::endl;
+
+///////////################################################################	
+
+
+
 ///////////################################################################
 		//	Randomly move all individuals
 		auto weight_map = boost::get(boost::edge_weight, individual_graph);
@@ -163,6 +199,7 @@ void simulate_serial_naive(int individual_count, int total_epochs, const Locatio
 		for (Individual& current_individual : individuals){
 			std::vector<int> node_neighbours = neighborhood_lookup_map[current_individual.get_location()];
 
+			
 			map<int,int> weights;
 			boost::graph_traits<LocationUndirectedGraph>::out_edge_iterator ei, ei_end;
     		for (tie(ei, ei_end) = out_edges(current_individual.get_location(), individual_graph); ei != ei_end; ++ei) {
@@ -171,7 +208,7 @@ void simulate_serial_naive(int individual_count, int total_epochs, const Locatio
 				weights[target_vertex]= weight_map[*ei];
 
     		}
-			current_individual.move(node_neighbours,weights); // Stay in the same spot or move to a neighbouring node
+			current_individual.move(node_neighbours,weights,population,individual_count,location_count); // Stay in the same spot or move to a neighbouring node
 		}
 ///////////################################################################		
 		// foreach each individual		
@@ -221,8 +258,8 @@ void reset_input(string filename, int individual_count, int& location_count, int
 	individual_graph = GraphHandler::get_location_undirected_graph_from_file(filename); // Read graph from File OR
 	//individual_graph = GraphHandler::get_sample_location_undirected_graph(); // Generate sample graph
 
-	location_count = individual_graph.m_vertices.size();
-	edge_count = individual_graph.m_edges.size();
+	location_count = boost::num_vertices(individual_graph);
+	edge_count = boost::num_edges(individual_graph);
 
 	individuals = GraphHandler::get_random_individuals(individual_count, location_count); // Randomize positions of individuals
     /*for(auto ind:individuals){
@@ -278,12 +315,12 @@ int main() {
 		double time_start, time_end, total_time;
 
 		// Serial
-		cout << "Running serial...";
+		std::cout << "Running serial...";
 		total_time = 0.0;
 		for (std::uint8_t current_repeat = 0; current_repeat != repeat_count; ++current_repeat) {
 			reset_input(input_graph_filename, individual_count, location_count, edge_count, individual_graph, individuals); // Reset individuals
 			time_start = omp_get_wtime();
-			simulate_serial_naive(individual_count, total_epochs, individual_graph, individuals);
+			simulate_serial_naive(individual_count, location_count, total_epochs, individual_graph, individuals);
 			time_end = omp_get_wtime() - time_start;
 			total_time += time_end;
 			cout << ".";
@@ -296,7 +333,7 @@ int main() {
 		for (std::uint8_t current_repeat = 0; current_repeat != repeat_count; ++current_repeat) {
 			reset_input(input_graph_filename, individual_count, location_count, edge_count, individual_graph, individuals); // Reset individuals
 			time_start = omp_get_wtime();
-			simulate_parallel(individual_count, total_epochs, individual_graph, individuals, epoch_statistics, location_count);
+			simulate_parallel(individual_count, location_count, total_epochs, individual_graph, individuals, epoch_statistics);
 			time_end = omp_get_wtime() - time_start;
 			total_time += time_end;
 			if (!GraphHandler::assert_epidemic_results(individual_count, epoch_statistics))

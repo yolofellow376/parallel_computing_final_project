@@ -1,0 +1,6 @@
+Infect.cpp: In function ‘void reset_input(std::string, int, int&, int&, LocationUndirectedGraph&, std::vector<Individual>&)’:
+Infect.cpp:224:26: error: ‘num_vetices’ is not a member of ‘boost’; did you mean ‘num_vertices’?
+  224 |  location_count = boost::num_vetices(individual_graph);
+      |                          ^~~~~~~~~~~
+      |                          num_vertices
+/var/spool/slurmd.spool/job65910544/slurm_script: line 33: ./3: No such file or directory

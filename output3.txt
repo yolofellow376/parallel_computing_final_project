@@ -5,10 +5,28 @@ Total Epochs: 3
 Graph from file: myedge.edges
 Repeat count: 1
 Location Count: 6
-Edge Count: 0
-Running serial....218.656 ms
+Edge Count: 10
+Running serial...total population: 1000
+total population: 1000
+total population: 1000
+total population: 1000
+
+-- Epidemic Results --
+Hit: 1 %
+Infected: 1 %
+Recovered: 0 %
+Epidemic Peak:1 %
+Epidemic Peak Epoch: 0
+.229.457 ms
 
 Running with OpenMP...total population: 1000
 total population: 1000
 total population: 1000
-.188.583 ms
+
+-- Epidemic Results --
+Hit: 1 %
+Infected: 1 %
+Recovered: 0 %
+Epidemic Peak:1 %
+Epidemic Peak Epoch: 1
+.46.9211 ms
