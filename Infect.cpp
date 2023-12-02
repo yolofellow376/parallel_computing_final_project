@@ -13,6 +13,24 @@ using namespace boost;
 
 std::vector<int>* population = nullptr;
 
+void writeVectorToFile(const std::vector<std::vector<int>>& myVector, const std::string& filename) {
+    std::ofstream outputFile(filename);
+
+    if (!outputFile.is_open()) {
+        std::cerr << "Error: Unable to open the file: " << filename << std::endl;
+        return;
+    }
+
+    // Write the vector to the file
+    for (const auto& row : myVector) {
+        for (const int& element : row) {
+            outputFile << element << " ";
+        }
+        outputFile << std::endl;
+    }
+
+    outputFile.close();
+}
 
 void simulate_parallel(int individual_count, int location_count, std::uint8_t total_epochs, const LocationUndirectedGraph& individual_graph,
 	vector<Individual>& individuals, vector<std::tuple<int, int, int>>& epoch_statistics) {
@@ -20,7 +38,9 @@ void simulate_parallel(int individual_count, int location_count, std::uint8_t to
 	int index = 0;
 	int max_index = static_cast<int>(individuals.size());
 	int chunk = static_cast<int>(max_index / DEFAULT_NUMBER_OF_THREADS);
-
+///////////################################################################
+	vector<vector<int>> epoch_population;	
+///////////################################################################
 	// Generate a look up map with the neighbouring nodes for each graph node
 	boost::unordered_map<int, vector<int>> neighborhood_lookup_map = GraphHandler::get_node_neighborhood_lookup_map(individual_graph);
 
@@ -55,7 +75,7 @@ void simulate_parallel(int individual_count, int location_count, std::uint8_t to
 		} // Implicit Barrier
 		int sum = std::accumulate(population->begin(), population->end(), 0);
     	// Print the sum
-    	std::cout << "total population: " << sum << std::endl;
+   // 	std::cout << "total population: " << sum << std::endl;
 
 ///////////################################################################	
 		
@@ -136,10 +156,20 @@ void simulate_parallel(int individual_count, int location_count, std::uint8_t to
 		} // Implicit Barrier
 
 		epoch_statistics.push_back(std::make_tuple(hit_count, infected_count, recovered_count)); // Store tuple of statistics for the current epoch
-	}
 
+
+///////////################################################################	
+		epoch_population.push_back((*population));
+
+	}
+	
+
+	
+	writeVectorToFile(epoch_population, "output_population.txt");
+
+///////////################################################################		
 	if (SAVE_CSV)
-		GraphHandler::save_epoch_statistics_to_csv("output.csv", epoch_statistics);
+		GraphHandler::save_epoch_statistics_to_csv("output_statistics.csv", epoch_statistics);
 	if (SAVE_GRAPHVIZ)
 		GraphHandler::save_undirected_graph_to_graphviz_file("individualGraph.dot", individual_graph);
 	if (SHOW_EPIDEMIC_RESULTS)
@@ -186,7 +216,7 @@ void simulate_serial_naive(int individual_count, int location_count, int total_e
 		}
 		int sum = std::accumulate(population->begin(), population->end(), 0);
     	// Print the sum
-    	std::cout << "total population: " << sum << std::endl;
+    //	std::cout << "total population: " << sum << std::endl;
 
 ///////////################################################################	
 
@@ -284,9 +314,9 @@ int main() {
 		string input_graph_filename = "myedge.edges";//"minimumantwerp.edges"; // Read locations from the full Antwerp graph or from a minimal version (500 nodes)
 
 		//individual_count *= 10;
-		individual_count = 1000; // population of Antwerp is 503138
+		individual_count = 10000; // population of Antwerp is 503138
 		//total_epochs *= 5;
-		total_epochs = 3; // 30 days
+		total_epochs = 100; // 30 days
 		thread_count = 4;
 		//repeat_count *= 4;
 		repeat_count = 1;

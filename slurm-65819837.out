@@ -1,2 +1,0 @@
-malloc(): unsorted double linked list corrupted
-/var/spool/slurmd.spool/job65819837/slurm_script: line 33: 3433969 Aborted                 (core dumped) ./3 > output3.txt

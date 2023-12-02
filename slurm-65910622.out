@@ -1,1 +1,0 @@
-/var/spool/slurmd.spool/job65910622/slurm_script: line 33: 2688413 Segmentation fault      (core dumped) ./3 > output3.txt

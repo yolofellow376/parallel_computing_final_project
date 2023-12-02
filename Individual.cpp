@@ -39,12 +39,11 @@ int Individual::get_random_location(map<int,int> weights,std::vector<int>& node_
 		int Locations = location_count;
 		//std::cout<<"chk4:　"<<neighbor<<std::endl;
 		double weight1 = exp( -pow(((n-Total/sqrt(Locations))/(Total/sqrt(Locations)/3)),2) );
-		double weight2 = exp( -pow((n/(Total/sqrt(Locations)/10)),2) );
+		double weight2 = exp( -pow((n/(Total/sqrt(Locations)/4)),2) );
 		//std::cout<<"chk5:　"<<neighbor<<std::endl;
-		weights[neighbor] = weight1+weight2;
 		//std::cout<<"chk6:　"<<neighbor<<std::endl;
 		//cout<<"neighbor: "<<neighbor<<"weights.at(neighbor): "<<weights[neighbor]<<endl;
-        probabilities.push_back(weights[neighbor]);
+        probabilities.push_back(weights[neighbor]+weight1+weight2);
     }
 // end mod by Alan ========================================================
 
@@ -55,12 +54,12 @@ int Individual::get_random_location(map<int,int> weights,std::vector<int>& node_
     }
 
 	//cout<<"probabilites.size(): "<<probabilities.size()<<endl;
-	//std::discrete_distribution<> discrete_distribution(probabilities.begin(), probabilities.end());
-	//return discrete_distribution(mersenne_twister_engine);
+	std::discrete_distribution<> discrete_distribution(probabilities.begin(), probabilities.end());
+	return discrete_distribution(mersenne_twister_engine);
 
-	std::uniform_int_distribution<> uniform_int_distribution(0, static_cast<int>(node_neighbours.size())-1); // Since we added the current location, no need to decarase the max int
+	//std::uniform_int_distribution<> uniform_int_distribution(0, static_cast<int>(node_neighbours.size())-1); // Since we added the current location, no need to decarase the max int
 
-	return uniform_int_distribution(mersenne_twister_engine);
+	//return uniform_int_distribution(mersenne_twister_engine);
 }
 
 // Randomly move the individual to another location or stay at the same location
@@ -68,7 +67,7 @@ void Individual::move(std::vector<int>& node_neighbours, map<int,int> weights, s
     
 	//std::cout<<"chk0"<<std::endl;
 	node_neighbours.push_back(location_); // Add current location in the new locations vector
-	weights[location_]=100;
+	weights[location_]=0;
 	location_ = node_neighbours[get_random_location( weights, node_neighbours, population, individual_count, location_count)]; // Assign the random location
 }
 //////////////////////////##################################################

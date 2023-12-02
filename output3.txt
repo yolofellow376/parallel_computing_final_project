@@ -1,32 +1,25 @@
 ----- Infectious Disease Modelling -----
 Number of threads: 4
-Individual Count: 1000
-Total Epochs: 3
+Individual Count: 10000
+Total Epochs: 100
 Graph from file: myedge.edges
 Repeat count: 1
-Location Count: 6
-Edge Count: 10
-Running serial...total population: 1000
-total population: 1000
-total population: 1000
-total population: 1000
-
+Location Count: 1000
+Edge Count: 3954
+Running serial...
 -- Epidemic Results --
-Hit: 1 %
-Infected: 1 %
-Recovered: 0 %
-Epidemic Peak:1 %
-Epidemic Peak Epoch: 0
-.229.457 ms
+Hit: 0.9999 %
+Infected: 0 %
+Recovered: 0.9999 %
+Epidemic Peak:0.7685 %
+Epidemic Peak Epoch: 9
+.33736.8 ms
 
-Running with OpenMP...total population: 1000
-total population: 1000
-total population: 1000
-
+Running with OpenMP...
 -- Epidemic Results --
-Hit: 1 %
-Infected: 1 %
-Recovered: 0 %
-Epidemic Peak:1 %
-Epidemic Peak Epoch: 1
-.46.9211 ms
+Hit: 0.9996 %
+Infected: 0 %
+Recovered: 0.9996 %
+Epidemic Peak:0.7128 %
+Epidemic Peak Epoch: 11
+.16994.6 ms
