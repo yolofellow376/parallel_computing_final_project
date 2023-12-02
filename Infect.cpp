@@ -73,7 +73,7 @@ void simulate_parallel(int individual_count, int location_count, std::uint8_t to
 			}
 			
 		} // Implicit Barrier
-		int sum = std::accumulate(population->begin(), population->end(), 0);
+		//int sum = std::accumulate(population->begin(), population->end(), 0);
     	// Print the sum
    // 	std::cout << "total population: " << sum << std::endl;
 
@@ -216,7 +216,7 @@ void simulate_serial_naive(int individual_count, int location_count, int total_e
 			int current_location = current_individual.get_location(); // Thread local variable
 			(*population)[current_location] += 1;
 		}
-		int sum = std::accumulate(population->begin(), population->end(), 0);
+		//int sum = std::accumulate(population->begin(), population->end(), 0);
     	// Print the sum
     //	std::cout << "total population: " << sum << std::endl;
 
@@ -280,11 +280,7 @@ void simulate_serial_naive(int individual_count, int location_count, int total_e
 		epoch_population.push_back((*population));
 
 	}
-	
-
-	
 	writeVectorToFile(epoch_population, "output_population_serial.txt");
-
 ///////////################################################################	
 	
 	if (SAVE_CSV)
@@ -325,7 +321,7 @@ int main() {
 		string input_graph_filename = "myedge.edges";//"minimumantwerp.edges"; // Read locations from the full Antwerp graph or from a minimal version (500 nodes)
 
 		//individual_count *= 10;
-		individual_count = 10000; // population of Antwerp is 503138
+		individual_count = 20000; // population of Antwerp is 503138
 		//total_epochs *= 5;
 		total_epochs = 30; // 30 days
 		thread_count = 4;
@@ -333,7 +329,7 @@ int main() {
 		repeat_count = 1;
 
 		// Set the thread count
-		omp_set_num_threads(thread_count);
+		//omp_set_num_threads(thread_count);
 
 		// Print calculation info
 		std::cout << "----- Infectious Disease Modelling -----" << std::endl;
@@ -370,21 +366,30 @@ int main() {
 		}
 		cout << (total_time / repeat_count) * 1000.0 << " ms" << endl;
 
-		// OpenMP
-		cout << endl << "Running with OpenMP...";
-		total_time = 0.0;
-		for (std::uint8_t current_repeat = 0; current_repeat != repeat_count; ++current_repeat) {
-			
-			time_start = omp_get_wtime();
-			simulate_parallel(individual_count, location_count, total_epochs, individual_graph, individuals, epoch_statistics);
-			time_end = omp_get_wtime() - time_start;
-			total_time += time_end;
-			if (!GraphHandler::assert_epidemic_results(individual_count, epoch_statistics))
-				cout << "Error." << endl;
-			cout << ".";
-			reset_input(input_graph_filename, individual_count, location_count, edge_count, individual_graph, individuals); // Reset individuals
 
+		// OpenMP
+		for(int thread=64;thread>=1;){
+
+			omp_set_num_threads(thread);
+
+			cout << endl << "Running with OpenMP...";
+			cout << thread;
+			total_time = 0.0;
+			for (std::uint8_t current_repeat = 0; current_repeat != repeat_count; ++current_repeat) {
+				
+				time_start = omp_get_wtime();
+				simulate_parallel(individual_count, location_count, total_epochs, individual_graph, individuals, epoch_statistics);
+				time_end = omp_get_wtime() - time_start;
+				total_time += time_end;
+				if (!GraphHandler::assert_epidemic_results(individual_count, epoch_statistics))
+					cout << "Error." << endl;
+				cout << ".";
+				reset_input(input_graph_filename, individual_count, location_count, edge_count, individual_graph, individuals); // Reset individuals
+
+			}
+			cout << (total_time / repeat_count) * 1000.0 << " ms" << endl;
+			thread = thread /2;
 		}
-		cout << (total_time / repeat_count) * 1000.0 << " ms" << endl;
+		
 	
 }
